@@ -1,0 +1,5 @@
+#!/bin/sh
+set -euo pipefail
+./gradlew build
+mkdir -p out
+mv -f versions/*/build/libs/* out/
