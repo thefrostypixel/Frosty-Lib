@@ -102,4 +102,21 @@ public class CycleButtonWidget<T extends CycleButtonWidget.Cyclable> extends But
             return path != null ? Component.translatable(path.value() + "." + name) : Component.literal(name);
         }
     }
+
+    public enum Togglable implements Cyclable {
+        On(true, Component.translatable("options.on")), Off(false, Component.translatable("options.off"));
+
+        Togglable(boolean bool, MutableComponent text) {
+            this.bool = bool;
+            this.text = text;
+        }
+
+        public final boolean bool;
+        private final MutableComponent text;
+
+        @Override
+        public MutableComponent text() {
+            return text;
+        }
+    }
 }
