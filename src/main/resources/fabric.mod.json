@@ -6,9 +6,9 @@
     "description": "A library to simplify creating UIs such as config screens.",
     "authors": ["thefrostypixel"],
     "contact": {
-        "homepage": "https://tfp.vitrem.org/FrostyUI",
-        "sources": "https://github.com/thefrostypixel/FrostyUI",
-        "issues": "https://github.com/thefrostypixel/FrostyUI/issues/new"
+        "homepage": "https://github.com/thefrostypixel/Frosty-Lib",
+        "sources": "https://github.com/thefrostypixel/Frosty-Lib",
+        "issues": "https://github.com/thefrostypixel/Frosty-Lib/issues/new"
     },
     "license": "CC0-1.0",
     "icon": "assets/frosty-lib/icon.png",
