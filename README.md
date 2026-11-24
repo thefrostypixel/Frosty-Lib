@@ -1,4 +1,4 @@
-## Libraries
+## Mods and libraries
 ### Required
 - [Fabric API](https://modrinth.com/mod/fabric-api)
 
