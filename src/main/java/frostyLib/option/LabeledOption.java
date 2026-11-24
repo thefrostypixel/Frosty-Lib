@@ -89,7 +89,7 @@ public class LabeledOption extends ListWidget.Option {
     }
 
     @Override
-    public int render(GuiGraphicsExtractor graphics, int x, int y, int width, int mouseX, int mouseY, float deltaTicks) {
+    public int render(GuiGraphicsExtractor graphics, int x, int y, int width/*? if <26.4-* {*//*, int mouseX, int mouseY, float deltaTicks*//*?}*/) {
         int labelWidth = widgets.isEmpty() ? width : Math.max(width - 200, width / 2);
         List<FormattedCharSequence> lines = Minecraft.getInstance().font.split(label(), labelWidth);
         int height = Math.max(3 + 9 * lines.size(), 20);
@@ -97,6 +97,10 @@ public class LabeledOption extends ListWidget.Option {
         for (FormattedCharSequence line : lines) {
             graphics.text(Minecraft.getInstance().font, line, x, (int) Math.ceil(textY += 9), CommonColors.WHITE);
         }
+        /*? if >=26.4-* {*/
+        int mouseX = (int) Minecraft.getInstance().mouseHandler.getScaledXPos(Minecraft.getInstance().getWindow());
+        int mouseY = (int) Minecraft.getInstance().mouseHandler.getScaledYPos(Minecraft.getInstance().getWindow());
+        /*?}*/
         if (description != null && x <= mouseX && mouseX <= x + width && y <= mouseY && mouseY <= y + height) {
             graphics.setComponentTooltipForNextFrame(Minecraft.getInstance().font, Arrays.stream(description.getString().split("\n")).map(s -> (Component) Component.literal(s)).toList(), mouseX, mouseY);
         }
@@ -114,7 +118,7 @@ public class LabeledOption extends ListWidget.Option {
                     widgets.get(i).setHeight(20);
                     widgets.get(i).setX(x);
                     widgets.get(i).setY(y + (height - widgets.get(i).getHeight()) / 2);
-                    widgets.get(i).extractRenderState(graphics, mouseX, mouseY, deltaTicks);
+                    widgets.get(i).extractRenderState(graphics/*? if <26.4-* {*//*, mouseX, mouseY, deltaTicks*//*?}*/);
                     x += widgets.get(i).getWidth();
                 }
             }

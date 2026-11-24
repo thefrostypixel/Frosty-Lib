@@ -119,7 +119,7 @@ public class TitledGroup extends Group {
     }
 
     @Override
-    public int render(GuiGraphicsExtractor graphics, int x, int y, int width, int mouseX, int mouseY, float deltaTicks) {
+    public int render(GuiGraphicsExtractor graphics, int x, int y, int width/*? if <26.4-* {*//*, int mouseX, int mouseY, float deltaTicks*//*?}*/) {
         int height = collapsable ? 20 : 0;
         if (title() != null) {
             List<FormattedCharSequence> lines = Minecraft.getInstance().font.split(title(), width - (collapsable ? 26 : 0));
@@ -134,10 +134,10 @@ public class TitledGroup extends Group {
             button.setHeight(20);
             button.setX(x);
             button.setY(y + height / 2 - 10);
-            button.extractRenderState(graphics, mouseX, mouseY, deltaTicks);
+            button.extractRenderState(graphics/*? if <26.4-* {*//*, mouseX, mouseY, deltaTicks*//*?}*/);
         }
         if (!collapsed) {
-            return height + super.render(graphics, x, y + height, width, mouseX, mouseY, deltaTicks);
+            return height + super.render(graphics, x, y + height, width/*? if <26.4-* {*//*, mouseX, mouseY, deltaTicks*//*?}*/);
         }
         return height;
     }

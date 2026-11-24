@@ -42,12 +42,12 @@ public class KeybindWidget extends Button.Plain {
     }
 
     @Override
-    public void extractContents(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float deltaTicks) {
+    public void extractContents(@NonNull GuiGraphicsExtractor graphics/*? if <26.4-* {*//*, int mouseX, int mouseY, float deltaTicks*//*?}*/) {
         if (!this.isFocused()) {
             listening = false;
             setMessage(keybind.getDisplayName());
         }
-        super.extractContents(graphics, mouseX, mouseY, deltaTicks);
+        super.extractContents(graphics/*? if <26.4-* {*//*, mouseX, mouseY, deltaTicks*//*?}*/);
     }
 
     @Override

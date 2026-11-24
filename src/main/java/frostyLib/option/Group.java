@@ -93,11 +93,11 @@ public class Group extends ListWidget.Option {
     }
 
     @Override
-    public int render(GuiGraphicsExtractor graphics, int x, int y, int width, int mouseX, int mouseY, float deltaTicks) {
+    public int render(GuiGraphicsExtractor graphics, int x, int y, int width/*? if <26.4-* {*//*, int mouseX, int mouseY, float deltaTicks*//*?}*/) {
         int height = 0;
         for (ListWidget.Option child : children) {
             if (child.visible()) {
-                height += child.render(graphics, x + (indentChildren ? 26 : 0), y + height, width - (indentChildren ? 26 : 0), mouseX, mouseY, deltaTicks);
+                height += child.render(graphics, x + (indentChildren ? 26 : 0), y + height, width - (indentChildren ? 26 : 0)/*? if <26.4-* {*//*, mouseX, mouseY, deltaTicks*//*?}*/);
             }
         }
         return height;

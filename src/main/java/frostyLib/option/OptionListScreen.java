@@ -62,13 +62,13 @@ public class OptionListScreen extends Screen {
     }
 
     @Override
-    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float deltaTicks) {
+    public void extractRenderState(GuiGraphicsExtractor graphics/*? if <26.4-* {*//*, int mouseX, int mouseY, float deltaTicks*//*?}*/) {
         clearWidgets();
         graphics.centeredText(font, getTitle(), width / 2, 10, CommonColors.WHITE);
         listWidget.setPosition(0, 30);
         listWidget.setSize(width, height - 64);
         listWidget.setPadding(32);
-        listWidget.extractRenderState(graphics, mouseX, mouseY, deltaTicks);
+        listWidget.extractRenderState(graphics/*? if <26.4-* {*//*, mouseX, mouseY, deltaTicks*//*?}*/);
         addWidget(listWidget);
         for (AbstractWidget child : listWidget.widgets()) {
             addWidget(child);
@@ -79,7 +79,7 @@ public class OptionListScreen extends Screen {
             button.setPosition(x, height - 26);
             button.setWidth(Math.min(width - 40, 200));
             button.setHeight(20);
-            button.extractRenderState(graphics, mouseX, mouseY, deltaTicks);
+            button.extractRenderState(graphics/*? if <26.4-* {*//*, mouseX, mouseY, deltaTicks*//*?}*/);
             addWidget(button);
             x += buttonWidth + 6;
         }

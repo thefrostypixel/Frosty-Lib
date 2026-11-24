@@ -2,13 +2,15 @@ package frostyLib.option;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+/*? if >=26.4-* {*/import net.minecraft.client.gui.GuiPipeline;/*?}*/
 import net.minecraft.client.gui.components.AbstractScrollArea;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.AbstractContainerWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.RenderPipelines;
+//import net.minecraft.client.renderer./*? if >=26.4-* {*/pipeline./*?}*/RenderPipelines;
+/*? if <26.4-* {*//*import net.minecraft.client.renderer.RenderPipelines;*//*?}*/
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.resources.Identifier;
 import org.jspecify.annotations.NonNull;
@@ -19,7 +21,7 @@ import java.util.function.BooleanSupplier;
 
 class ListWidget extends AbstractContainerWidget {
     private static final Identifier menuListBackground = Identifier.withDefaultNamespace("textures/gui/menu_list_background.png");
-    private static final Identifier inworldMenuListBackground = Identifier.withDefaultNamespace("textures/gui/inworld_menu_list_background.png");
+    /*? if <26.4-* {*//*private static final Identifier inworldMenuListBackground = Identifier.withDefaultNamespace("textures/gui/inworld_menu_list_background.png");*//*?}*/
 
     public final List<Option> options;
     private int padding = 3;
@@ -74,10 +76,10 @@ class ListWidget extends AbstractContainerWidget {
     }
 
     @Override
-    public void extractWidgetRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float deltaTicks) {
-        graphics.blit(RenderPipelines.GUI_TEXTURED, Minecraft.getInstance().level == null ? menuListBackground : inworldMenuListBackground, getX(), getY(), getRight(), getBottom() + (int) scrollAmount(), getWidth(), getHeight(), 32, 32);
-        graphics.blit(RenderPipelines.GUI_TEXTURED, Minecraft.getInstance().level == null ? Screen.HEADER_SEPARATOR : Screen.INWORLD_HEADER_SEPARATOR, getX(), getY() - 2, 0, 0, getWidth(), 2, 32, 2);
-        graphics.blit(RenderPipelines.GUI_TEXTURED, Minecraft.getInstance().level == null ? Screen.FOOTER_SEPARATOR : Screen.INWORLD_FOOTER_SEPARATOR, getX(), getBottom(), 0, 0, getWidth(), 2, 32, 2);
+    public void extractWidgetRenderState(GuiGraphicsExtractor graphics/*? if <26.4-* {*//*, int mouseX, int mouseY, float deltaTicks*//*?}*/) {
+        graphics.blit(/*? if <26.4-* {*//*RenderPipelines.GUI_TEXTURED*//*?} else {*/GuiPipeline.TEXTURED/*?}*/, /*? if <26.4-* {*//*Minecraft.getInstance().level == null ? *//*?}*/menuListBackground/*? if <26.4-* {*/ /*: inworldMenuListBackground*//*?}*/, getX(), getY(), getRight(), getBottom() + (int) scrollAmount(), getWidth(), getHeight(), 32, 32);
+        graphics.blit(/*? if <26.4-* {*//*RenderPipelines.GUI_TEXTURED*//*?} else {*/GuiPipeline.TEXTURED/*?}*/, /*? if <26.4-* {*//*Minecraft.getInstance().level == null ? *//*?}*/Screen.HEADER_SEPARATOR/*? if <26.4-* {*/ /*: Screen.INWORLD_HEADER_SEPARATOR*//*?}*/, getX(), getY() - 2, 0, 0, getWidth(), 2, 32, 2);
+        graphics.blit(/*? if <26.4-* {*//*RenderPipelines.GUI_TEXTURED*//*?} else {*/GuiPipeline.TEXTURED/*?}*/, /*? if <26.4-* {*//*Minecraft.getInstance().level == null ? *//*?}*/Screen.FOOTER_SEPARATOR/*? if <26.4-* {*/ /*: Screen.INWORLD_FOOTER_SEPARATOR*//*?}*/, getX(), getBottom(), 0, 0, getWidth(), 2, 32, 2);
         graphics.enableScissor(getX(), getY(), getRight(), getBottom());
         int height = 4;
         boolean overflows = false;
@@ -94,12 +96,12 @@ class ListWidget extends AbstractContainerWidget {
         int y = getY() - (int) scrollAmount() - 2;
         for (Option option : options) {
             if (option.visible()) {
-                height += option.render(graphics, padding, y + height, getWidth() - padding - Math.max(overflows ? scrollbarWidth() : 0, padding), mouseX, mouseY, deltaTicks);
+                height += option.render(graphics, padding, y + height, getWidth() - padding - Math.max(overflows ? scrollbarWidth() : 0, padding)/*? if <26.4-* {*//*, mouseX, mouseY, deltaTicks*//*?}*/);
             }
         }
         contentHeight = height;
         graphics.disableScissor();
-        extractScrollbar(graphics, mouseX, mouseY);
+        extractScrollbar(graphics/*? if <26.4-* {*//*, mouseX, mouseY*//*?}*/);
     }
 
     @Override
@@ -129,9 +131,9 @@ class ListWidget extends AbstractContainerWidget {
             return 0;
         }
 
-        public int render(GuiGraphicsExtractor graphics, int x, int y, int width, int mouseX, int mouseY, float deltaTicks) {
+        public int render(GuiGraphicsExtractor graphics, int x, int y, int width/*? if <26.4-* {*//*, int mouseX, int mouseY, float deltaTicks*//*?}*/) {
             for (AbstractWidget widget : widgets()) {
-                widget.extractRenderState(graphics, mouseX, mouseY, deltaTicks);
+                widget.extractRenderState(graphics/*? if <26.4-* {*//*, mouseX, mouseY, deltaTicks*//*?}*/);
             }
             return 0;
         }
