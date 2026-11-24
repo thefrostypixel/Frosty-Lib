@@ -8,7 +8,7 @@
     "contact": {
         "homepage": "https://github.com/thefrostypixel/Frosty-Lib",
         "sources": "https://github.com/thefrostypixel/Frosty-Lib",
-        "issues": "https://github.com/thefrostypixel/Frosty-Lib/issues/new"
+        "issues": "https://github.com/thefrostypixel/Frosty-Lib/issues?q=is%3Aissue"
     },
     "license": "CC0-1.0",
     "icon": "assets/frosty-lib/icon.png",
