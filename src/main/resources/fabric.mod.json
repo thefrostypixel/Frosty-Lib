@@ -1,7 +1,7 @@
 {
     "schemaVersion": 1,
     "id": "frosty-lib",
-    "version": "${version.mod}",
+    "version": "${version}",
     "name": "Frosty Lib",
     "description": "A library to simplify creating UIs such as config screens.",
     "authors": ["thefrostypixel"],
@@ -14,9 +14,9 @@
     "icon": "assets/frosty-lib/icon.png",
     "environment": "client",
     "depends": {
-        "minecraft": "~${version.minecraft}",
-        "fabricloader": "*",
-        "fabric-api": "*"
+        "minecraft": "${minecraft.range}",
+        "fabricloader": "${fabricLoader.range}",
+        "fabric-api": "${fabricApi.range}"
     },
     "custom": {
         "modmenu": {
