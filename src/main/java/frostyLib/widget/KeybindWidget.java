@@ -13,36 +13,33 @@ import org.jspecify.annotations.NonNull;
 import java.util.function.Consumer;
 
 public class KeybindWidget extends Button.Plain {
-    private InputConstants.Key keybind = InputConstants.UNKNOWN;
-    private Consumer<InputConstants.Key> onSelect = null;
-    private boolean listening = false;
-
     public KeybindWidget() {
         super(0, 0, 0, 0, InputConstants.UNKNOWN.getDisplayName(), button -> {}, textSupplier -> Component.empty().append(InputConstants.UNKNOWN.getDisplayName()));
     }
 
+    private boolean listening = false;
+
+    private InputConstants.Key keybind = InputConstants.UNKNOWN;
     public KeybindWidget keybind(InputConstants.Key keybind) {
         this.keybind = keybind;
         this.listening = false;
         setMessage(keybind.getDisplayName());
         return this;
     }
-
     public InputConstants.Key keybind() {
         return keybind;
     }
 
+    private Consumer<InputConstants.Key> onSelect = null;
     public KeybindWidget onSelect(Consumer<InputConstants.Key> onSelect) {
         this.onSelect = onSelect;
         return this;
     }
-
     public Consumer<InputConstants.Key> onSelect() {
         return onSelect;
     }
 
-    @Override
-    public void extractContents(@NonNull GuiGraphicsExtractor graphics/*? if <26.4-* {*//*, int mouseX, int mouseY, float deltaTicks*//*?}*/) {
+    @Override public void extractContents(@NonNull GuiGraphicsExtractor graphics/*? if <26.4-* {*//*, int mouseX, int mouseY, float deltaTicks*//*?}*/) {
         if (!this.isFocused()) {
             listening = false;
             setMessage(keybind.getDisplayName());
@@ -50,16 +47,14 @@ public class KeybindWidget extends Button.Plain {
         super.extractContents(graphics/*? if <26.4-* {*//*, mouseX, mouseY, deltaTicks*//*?}*/);
     }
 
-    @Override
-    public void onPress(@NonNull InputWithModifiers input) {
+    @Override public void onPress(@NonNull InputWithModifiers input) {
         super.onPress(input);
         super.setFocused(true);
         listening = true;
         setMessage(Component.literal("> ").append(Component.empty().append(keybind.getDisplayName()).withStyle(ChatFormatting.WHITE, ChatFormatting.UNDERLINE)).append(" <").withStyle(ChatFormatting.YELLOW));
     }
 
-    @Override
-    public boolean keyPressed(@NonNull KeyEvent event) {
+    @Override public boolean keyPressed(@NonNull KeyEvent event) {
         if (listening) {
             listening = false;
             keybind = event.isEscape() ? InputConstants.UNKNOWN : InputConstants.getKey(event);
@@ -72,8 +67,7 @@ public class KeybindWidget extends Button.Plain {
         return super.keyPressed(event);
     }
 
-    @Override
-    public boolean mouseClicked(@NonNull MouseButtonEvent event, boolean doubleClick) {
+    @Override public boolean mouseClicked(@NonNull MouseButtonEvent event, boolean doubleClick) {
         if (listening) {
             listening = false;
             keybind = InputConstants.Type.MOUSE.getOrCreate(event.button());

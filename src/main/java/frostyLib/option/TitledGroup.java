@@ -14,95 +14,81 @@ import java.util.List;
 import java.util.function.BooleanSupplier;
 
 public class TitledGroup extends Group {
-    private Component title = null;
-    private Component description = null;
-    private final Button button;
-    private boolean collapsable = true;
-    private boolean collapsed = false;
-
     public TitledGroup() {
         super.indentChildren(true);
         button = Button.builder(Component.literal("▼"), button -> collapsed(!collapsed)).build();
     }
 
-    @Override
-    public TitledGroup visible(BooleanSupplier visible) {
+    @Override public TitledGroup visible(BooleanSupplier visible) {
+        super.visible(visible);
+        return this;
+    }
+    @Override public TitledGroup visible(boolean visible) {
         super.visible(visible);
         return this;
     }
 
-    @Override
-    public TitledGroup visible(boolean visible) {
-        super.visible(visible);
-        return this;
-    }
-
-    @Override
-    public TitledGroup indentChildren(boolean indentChildren) {
+    @Override public TitledGroup indentChildren(boolean indentChildren) {
         super.indentChildren(indentChildren);
         return this;
     }
 
+    private final Button button;
+    private boolean collapsable = true;
     public TitledGroup collapsable(boolean collapsable) {
         this.collapsable = collapsable;
         collapsed(collapsed);
         return this;
     }
-
     public boolean collapsable() {
         return collapsable;
     }
 
+    private boolean collapsed = false;
     public TitledGroup collapsed(boolean collapsed) {
         this.collapsed = collapsable && collapsed;
         button.setMessage(Component.literal(collapsed ? "▶" : "▼"));
         return this;
     }
-
     public boolean collapsed() {
         return collapsed;
     }
 
+    private Component title = null;
     public TitledGroup title(Component title) {
         this.title = title;
         return this;
     }
-
     public TitledGroup translatableTitle(String titleKey, Object... args) {
         this.title = Component.translatable(titleKey, args);
         return this;
     }
-
     public TitledGroup literalTitle(String titleText) {
         this.title = Component.literal(titleText);
         return this;
     }
-
     public Component title() {
         return title;
     }
 
+    private Component description = null;
     public TitledGroup description(Component description) {
         this.description = description;
         return this;
     }
-
     public TitledGroup translatableDescription(String descriptionKey, Object... args) {
         this.description = Component.translatable(descriptionKey, args);
         return this;
     }
-
     public TitledGroup literalDescription(String descriptionText) {
         this.description = Component.literal(descriptionText);
         return this;
     }
-
     public Component description() {
         return description;
     }
 
-    @Override
-    public List<AbstractWidget> widgets() {
+    @Override public List<AbstractWidget> widgets() {
         List<AbstractWidget> widgets = new ArrayList<>();
         if (collapsable) {
             widgets.add(button);
@@ -113,13 +99,11 @@ public class TitledGroup extends Group {
         return widgets;
     }
 
-    @Override
-    public int height(int width) {
+    @Override public int height(int width) {
         return title() != null ? Math.max(3 + 9 * Minecraft.getInstance().font.split(title(), width - (collapsable ? 26 : 0)).size(), 20) : collapsable ? 20 : 0;
     }
 
-    @Override
-    public int render(GuiGraphicsExtractor graphics, int x, int y, int width/*? if <26.4-* {*//*, int mouseX, int mouseY, float deltaTicks*//*?}*/) {
+    @Override public int render(GuiGraphicsExtractor graphics, int x, int y, int width/*? if <26.4-* {*//*, int mouseX, int mouseY, float deltaTicks*//*?}*/) {
         int height = collapsable ? 20 : 0;
         if (title() != null) {
             List<FormattedCharSequence> lines = Minecraft.getInstance().font.split(title(), width - (collapsable ? 26 : 0));

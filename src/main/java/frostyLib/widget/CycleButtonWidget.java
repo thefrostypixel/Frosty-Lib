@@ -19,38 +19,34 @@ public class CycleButtonWidget<T extends CycleButtonWidget.Cyclable> extends But
         return new CycleButtonWidget<T>().options((T[]) selected.getClass().getEnumConstants()).selected(selected);
     }
 
-    private T selected = null;
-    private T[] options = null;
-    private Consumer<T> onCycle = null;
-
     public CycleButtonWidget() {
         super(0, 0, 0, 0, Component.empty(), button -> {}, textSupplier -> Component.empty());
     }
 
+    private T selected = null;
     public CycleButtonWidget<T> selected(T selected) {
         this.selected = selected;
         setMessage(selected == null ? Component.empty() : selected.text());
         return this;
     }
-
     public T selected() {
         return selected;
     }
 
+    private T[] options = null;
     public CycleButtonWidget<T> options(T[] options) {
         this.options = options;
         return this;
     }
-
     public T[] options() {
         return options.clone();
     }
 
+    private Consumer<T> onCycle = null;
     public CycleButtonWidget<T> onCycle(Consumer<T> onCycle) {
         this.onCycle = onCycle;
         return this;
     }
-
     public Consumer<T> onCycle() {
         return onCycle;
     }
@@ -74,13 +70,11 @@ public class CycleButtonWidget<T extends CycleButtonWidget.Cyclable> extends But
         }
     }
 
-    @Override
-    public void onPress(@NonNull InputWithModifiers input) {
+    @Override public void onPress(@NonNull InputWithModifiers input) {
         cycle(true);
     }
 
-    @Override
-    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+    @Override public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
         if (event.button() == InputConstants.MOUSE_BUTTON_LEFT || event.button() == InputConstants.MOUSE_BUTTON_RIGHT) {
             cycle(event.button() == InputConstants.MOUSE_BUTTON_LEFT);
             return true;
@@ -89,9 +83,7 @@ public class CycleButtonWidget<T extends CycleButtonWidget.Cyclable> extends But
     }
 
     public interface Cyclable {
-        @Retention(RetentionPolicy.RUNTIME)
-        @Target(ElementType.TYPE)
-        @interface TranslationPath {
+        @Retention(RetentionPolicy.RUNTIME) @Target(ElementType.TYPE) @interface TranslationPath {
             String value();
         }
 
@@ -112,10 +104,9 @@ public class CycleButtonWidget<T extends CycleButtonWidget.Cyclable> extends But
         }
 
         public final boolean bool;
-        private final MutableComponent text;
 
-        @Override
-        public MutableComponent text() {
+        private final MutableComponent text;
+        @Override public MutableComponent text() {
             return text;
         }
     }

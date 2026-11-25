@@ -13,83 +13,71 @@ import java.util.List;
 import java.util.function.BooleanSupplier;
 
 public class LabeledOption extends ListWidget.Option {
+
+    @Override public LabeledOption visible(BooleanSupplier visible) {
+        super.visible(visible);
+        return this;
+    }
+    @Override public LabeledOption visible(boolean visible) {
+        super.visible(visible);
+        return this;
+    }
+
     private Component label = null;
-    private Component description = null;
-    private final List<AbstractWidget> widgets = new ArrayList<>();
-    private final List<Double> widthWeights = new ArrayList<>();
-
-    @Override
-    public LabeledOption visible(BooleanSupplier visible) {
-        super.visible(visible);
-        return this;
-    }
-
-    @Override
-    public LabeledOption visible(boolean visible) {
-        super.visible(visible);
-        return this;
-    }
-
     public LabeledOption label(Component label) {
         this.label = label;
         return this;
     }
-
     public LabeledOption translatableLabel(String labelKey, Object... args) {
         this.label = Component.translatable(labelKey, args);
         return this;
     }
-
     public LabeledOption literalLabel(String labelText) {
         this.label = Component.literal(labelText);
         return this;
     }
-
     public Component label() {
         return label;
     }
 
+    private Component description = null;
     public LabeledOption description(Component description) {
         this.description = description;
         return this;
     }
-
     public LabeledOption translatableDescription(String descriptionKey, Object... args) {
         this.description = Component.translatable(descriptionKey, args);
         return this;
     }
-
     public LabeledOption literalDescription(String descriptionText) {
         this.description = Component.literal(descriptionText);
         return this;
     }
-
     public Component description() {
         return description;
     }
 
+    private final List<AbstractWidget> widgets = new ArrayList<>();
+    private final List<Double> widthWeights = new ArrayList<>();
+
     public LabeledOption add(AbstractWidget widget) {
         return add(widget, 1);
     }
-
     public LabeledOption add(AbstractWidget widget, double widthWeight) {
         widgets.add(widget);
         widthWeights.add(widthWeight);
         return this;
     }
 
-    @Override
-    public List<AbstractWidget> widgets() {
+    @Override public List<AbstractWidget> widgets() {
         return widgets;
     }
 
-    @Override
-    public int height(int width) {
+    @Override public int height(int width) {
         return Math.max(3 + 9 * Minecraft.getInstance().font.split(label(), widgets.isEmpty() ? width : Math.max(width - 200, width / 2)).size(), 20);
     }
 
-    @Override
-    public int render(GuiGraphicsExtractor graphics, int x, int y, int width/*? if <26.4-* {*//*, int mouseX, int mouseY, float deltaTicks*//*?}*/) {
+    @Override public int render(GuiGraphicsExtractor graphics, int x, int y, int width/*? if <26.4-* {*//*, int mouseX, int mouseY, float deltaTicks*//*?}*/) {
         int labelWidth = widgets.isEmpty() ? width : Math.max(width - 200, width / 2);
         List<FormattedCharSequence> lines = Minecraft.getInstance().font.split(label(), labelWidth);
         int height = Math.max(3 + 9 * lines.size(), 20);

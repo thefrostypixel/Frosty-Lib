@@ -14,9 +14,7 @@ import java.lang.reflect.Modifier;
 import java.nio.file.Files;
 
 public interface SavedConfig {
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target(ElementType.TYPE)
-    @interface Path {
+    @Retention(RetentionPolicy.RUNTIME) @Target(ElementType.TYPE) @interface Path {
         String value();
     }
 

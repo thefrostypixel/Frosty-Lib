@@ -1,6 +1,6 @@
 package frostyLib.option;
 
-import net.minecraft.client.Minecraft;
+/*? if <26.4-* {*//*import net.minecraft.client.Minecraft;*//*?}*/
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 /*? if >=26.4-* {*/import net.minecraft.client.gui.GuiPipeline;/*?}*/
 import net.minecraft.client.gui.components.AbstractScrollArea;
@@ -24,14 +24,11 @@ class ListWidget extends AbstractContainerWidget {
     /*? if <26.4-* {*//*private static final Identifier inworldMenuListBackground = Identifier.withDefaultNamespace("textures/gui/inworld_menu_list_background.png");*//*?}*/
 
     public final List<Option> options;
-    private int padding = 3;
-    private int contentHeight = 4;
 
     public ListWidget(List<Option> options) {
         super(0, 0, 0, 0, CommonComponents.EMPTY, AbstractScrollArea.defaultSettings(10));
         this.options = options;
     }
-
     public ListWidget() {
         this(new ArrayList<>());
     }
@@ -46,37 +43,33 @@ class ListWidget extends AbstractContainerWidget {
         return widgets;
     }
 
-    @Override
-    public @NonNull List<? extends GuiEventListener> children() {
+    @Override public @NonNull List<? extends GuiEventListener> children() {
         return widgets();
     }
 
+    private int padding = 3;
     public void setPadding(int padding) {
         this.padding = Math.max(3, padding);
     }
-
     public int getPadding() {
         return padding;
     }
 
-    @Override
-    public double scrollAmount() {
+    @Override public double scrollAmount() {
         setScrollAmount(super.scrollAmount());
         return super.scrollAmount();
     }
 
-    @Override
-    protected int scrollBarX() {
+    @Override protected int scrollBarX() {
         return this.width - Math.max(scrollbarWidth(), padding) + 3;
     }
 
-    @Override
-    protected int contentHeight() {
+    private int contentHeight = 4;
+    @Override protected int contentHeight() {
         return contentHeight;
     }
 
-    @Override
-    public void extractWidgetRenderState(GuiGraphicsExtractor graphics/*? if <26.4-* {*//*, int mouseX, int mouseY, float deltaTicks*//*?}*/) {
+    @Override public void extractWidgetRenderState(GuiGraphicsExtractor graphics/*? if <26.4-* {*//*, int mouseX, int mouseY, float deltaTicks*//*?}*/) {
         graphics.blit(/*? if <26.4-* {*//*RenderPipelines.GUI_TEXTURED*//*?} else {*/GuiPipeline.TEXTURED/*?}*/, /*? if <26.4-* {*//*Minecraft.getInstance().level == null ? *//*?}*/menuListBackground/*? if <26.4-* {*/ /*: inworldMenuListBackground*//*?}*/, getX(), getY(), getRight(), getBottom() + (int) scrollAmount(), getWidth(), getHeight(), 32, 32);
         graphics.blit(/*? if <26.4-* {*//*RenderPipelines.GUI_TEXTURED*//*?} else {*/GuiPipeline.TEXTURED/*?}*/, /*? if <26.4-* {*//*Minecraft.getInstance().level == null ? *//*?}*/Screen.HEADER_SEPARATOR/*? if <26.4-* {*/ /*: Screen.INWORLD_HEADER_SEPARATOR*//*?}*/, getX(), getY() - 2, 0, 0, getWidth(), 2, 32, 2);
         graphics.blit(/*? if <26.4-* {*//*RenderPipelines.GUI_TEXTURED*//*?} else {*/GuiPipeline.TEXTURED/*?}*/, /*? if <26.4-* {*//*Minecraft.getInstance().level == null ? *//*?}*/Screen.FOOTER_SEPARATOR/*? if <26.4-* {*/ /*: Screen.INWORLD_FOOTER_SEPARATOR*//*?}*/, getX(), getBottom(), 0, 0, getWidth(), 2, 32, 2);
@@ -104,21 +97,17 @@ class ListWidget extends AbstractContainerWidget {
         extractScrollbar(graphics/*? if <26.4-* {*//*, mouseX, mouseY*//*?}*/);
     }
 
-    @Override
-    public void updateWidgetNarration(@NonNull NarrationElementOutput output) {}
+    @Override public void updateWidgetNarration(@NonNull NarrationElementOutput output) {}
 
     public static class Option {
         private BooleanSupplier visible = () -> true;
-
         public Option visible(BooleanSupplier visible) {
             this.visible = visible;
             return this;
         }
-
         public Option visible(boolean visible) {
             return visible(() -> visible);
         }
-
         public boolean visible() {
             return this.visible.getAsBoolean();
         }

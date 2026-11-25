@@ -10,34 +10,29 @@ import java.util.List;
 import java.util.function.BooleanSupplier;
 
 public class Group extends ListWidget.Option {
+    @Override public Group visible(BooleanSupplier visible) {
+        super.visible(visible);
+        return this;
+    }
+    @Override public Group visible(boolean visible) {
+        super.visible(visible);
+        return this;
+    }
+
     private boolean indentChildren = false;
-    private final List<ListWidget.Option> children = new ArrayList<>();
-
-    @Override
-    public Group visible(BooleanSupplier visible) {
-        super.visible(visible);
-        return this;
-    }
-
-    @Override
-    public Group visible(boolean visible) {
-        super.visible(visible);
-        return this;
-    }
-
     public Group indentChildren(boolean indentChildren) {
         this.indentChildren = indentChildren;
         return this;
     }
-
     public boolean indentChildren() {
         return indentChildren;
     }
 
+    private final List<ListWidget.Option> children = new ArrayList<>();
+
     public void add(ListWidget.Option... options) {
         children.addAll(Arrays.asList(options));
     }
-
     public void add(int index, ListWidget.Option... options) {
         children.addAll(index, Arrays.asList(options));
     }
@@ -45,7 +40,6 @@ public class Group extends ListWidget.Option {
     public void remove(int index) {
         children.remove(index);
     }
-
     public void remove(ListWidget.Option... options) {
         children.removeAll(Arrays.asList(options));
     }
@@ -74,8 +68,7 @@ public class Group extends ListWidget.Option {
         return children.isEmpty();
     }
 
-    @Override
-    public List<AbstractWidget> widgets() {
+    @Override public List<AbstractWidget> widgets() {
         List<AbstractWidget> widgets = new ArrayList<>();
         for (ListWidget.Option child : children) {
             widgets.addAll(child.widgets());
@@ -83,8 +76,7 @@ public class Group extends ListWidget.Option {
         return widgets;
     }
 
-    @Override
-    public int height(int width) {
+    @Override public int height(int width) {
         int height = 0;
         for (ListWidget.Option option : children) {
             height += option.visible() ? option.height(width - (indentChildren ? 26 : 0)) : 0;
@@ -92,8 +84,7 @@ public class Group extends ListWidget.Option {
         return height;
     }
 
-    @Override
-    public int render(GuiGraphicsExtractor graphics, int x, int y, int width/*? if <26.4-* {*//*, int mouseX, int mouseY, float deltaTicks*//*?}*/) {
+    @Override public int render(GuiGraphicsExtractor graphics, int x, int y, int width/*? if <26.4-* {*//*, int mouseX, int mouseY, float deltaTicks*//*?}*/) {
         int height = 0;
         for (ListWidget.Option child : children) {
             if (child.visible()) {

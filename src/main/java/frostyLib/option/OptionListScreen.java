@@ -17,10 +17,6 @@ import java.util.List;
 
 public class OptionListScreen extends Screen {
     private final Screen parent;
-    public final List<ListWidget.Option> options = new ArrayList<>();
-    private final ListWidget listWidget = new ListWidget(options);
-    public final List<ButtonWidget> buttons = new ArrayList<>(List.of(new ButtonWidget().label(CommonComponents.GUI_DONE).onPress(this::onClose)));
-
     public OptionListScreen(Screen parent, Component title) {
         super(title);
         this.parent = parent;
@@ -29,6 +25,11 @@ public class OptionListScreen extends Screen {
         super(Component.translatable(titleKey));
         this.parent = parent;
     }
+
+    public final List<ListWidget.Option> options = new ArrayList<>();
+    private final ListWidget listWidget = new ListWidget(options);
+
+    public final List<ButtonWidget> buttons = new ArrayList<>(List.of(new ButtonWidget().label(CommonComponents.GUI_DONE).onPress(this::onClose)));
 
     public OptionListScreen buttons(ButtonWidget... buttons) {
         return this.buttons(Arrays.asList(buttons));
@@ -61,8 +62,7 @@ public class OptionListScreen extends Screen {
         return this;
     }
 
-    @Override
-    public void extractRenderState(GuiGraphicsExtractor graphics/*? if <26.4-* {*//*, int mouseX, int mouseY, float deltaTicks*//*?}*/) {
+    @Override public void extractRenderState(GuiGraphicsExtractor graphics/*? if <26.4-* {*//*, int mouseX, int mouseY, float deltaTicks*//*?}*/) {
         clearWidgets();
         graphics.centeredText(font, getTitle(), width / 2, 10, CommonColors.WHITE);
         listWidget.setPosition(0, 30);
@@ -85,13 +85,11 @@ public class OptionListScreen extends Screen {
         }
     }
 
-    @Override
-    public boolean keyPressed(@NonNull KeyEvent event) {
+    @Override public boolean keyPressed(@NonNull KeyEvent event) {
         return this.getFocused() != null && this.getFocused().keyPressed(event) || super.keyPressed(event);
     }
 
-    @Override
-    public void onClose() {
+    @Override public void onClose() {
         Minecraft.getInstance().setScreenAndShow(parent);
     }
 }
