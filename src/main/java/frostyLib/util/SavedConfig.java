@@ -12,6 +12,7 @@ import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.nio.file.Files;
+import java.util.Arrays;
 
 public interface SavedConfig {
     @Retention(RetentionPolicy.RUNTIME) @Target(ElementType.TYPE) @interface Path {
@@ -70,29 +71,26 @@ public interface SavedConfig {
         }
     }
 
-    static void deserialize(Class<?> config, JsonObject json) {
-        try {
+    private static void deserialize(Class<?> config, Object object, JsonElement json) {
+        if (json instanceof JsonObject jsonObject) {
             for (Field field : config.getDeclaredFields()) {
-                if (Modifier.isStatic(field.getModifiers()) && !Modifier.isFinal(field.getModifiers()) && !Modifier.isTransient(field.getModifiers()) && json.has(field.getName())) {
-                    field.setAccessible(true);
-                    field.set(null, gson.fromJson(json.get(field.getName()), field.getGenericType()));
+                if (Modifier.isStatic(field.getModifiers()) == (object == null) && !Modifier.isFinal(field.getModifiers()) && !Modifier.isTransient(field.getModifiers()) && jsonObject.has(field.getName())) {
+                    try {
+                        Object value = gson.fromJson(jsonObject.get(field.getName()), field.getGenericType());
+                        if (value != null || Arrays.stream(field.getAnnotations()).anyMatch(annotation -> annotation.annotationType().getSimpleName().equals("Nullable"))) {
+                            field.setAccessible(true);
+                            field.set(object, value);
+                        }
+                    } catch (Throwable error) {}
                 }
             }
-        } catch (Throwable error) {
-            throw new RuntimeException(error);
         }
     }
-    default void deserialize(JsonObject json) {
-        try {
-            for (Field field : getClass().getDeclaredFields()) {
-                if (Modifier.isStatic(field.getModifiers()) && !Modifier.isFinal(field.getModifiers()) && !Modifier.isTransient(field.getModifiers()) && json.has(field.getName())) {
-                    field.setAccessible(true);
-                    field.set(null, gson.fromJson(json.get(field.getName()), field.getGenericType()));
-                }
-            }
-        } catch (Throwable error) {
-            throw new RuntimeException(error);
-        }
+    static void deserialize(Class<?> config, JsonElement json) {
+        deserialize(config, null, json);
+    }
+    default void deserialize(JsonElement json) {
+        deserialize(getClass(), this, json);
     }
 
     static void save(Class<?> config, java.nio.file.Path path) {
@@ -127,18 +125,10 @@ public interface SavedConfig {
     }
 
     static void load(Class<?> config, java.nio.file.Path path) {
-        try {
-            if (Files.exists(path)) {
-                JsonObject json = JsonParser.parseString(Files.readString(path)).getAsJsonObject();
-                for (Field field : config.getDeclaredFields()) {
-                    if (Modifier.isStatic(field.getModifiers()) && !Modifier.isFinal(field.getModifiers()) && !Modifier.isTransient(field.getModifiers()) && json.has(field.getName())) {
-                        field.setAccessible(true);
-                        field.set(null, gson.fromJson(json.get(field.getName()), field.getGenericType()));
-                    }
-                }
-            }
-        } catch (Throwable error) {
-            throw new RuntimeException(error);
+        if (Files.exists(path)) {
+            try {
+                deserialize(config, JsonParser.parseString(Files.readString(path)));
+            } catch (Throwable error) {}
         }
     }
     static void load(Class<?> config, String path) {
@@ -149,20 +139,10 @@ public interface SavedConfig {
     }
 
     default <T extends SavedConfig> T load(java.nio.file.Path path) {
-        try {
-            if (Files.exists(path)) {
-                Object loaded = gson.fromJson(Files.readString(path), getClass());
-                if (loaded != null) {
-                    for (Field field : getClass().getDeclaredFields()) {
-                        if (!Modifier.isStatic(field.getModifiers()) && !Modifier.isTransient(field.getModifiers())) {
-                            field.setAccessible(true);
-                            field.set(this, field.get(loaded));
-                        }
-                    }
-                }
-            }
-        } catch (Throwable error) {
-            throw new RuntimeException(error);
+        if (Files.exists(path)) {
+            try {
+                deserialize(JsonParser.parseString(Files.readString(path)));
+            } catch (Throwable error) {}
         }
         return (T) this;
     }
